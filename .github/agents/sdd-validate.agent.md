@@ -2,8 +2,14 @@
 name: sdd-validate
 description: Phase 6 - Verify implementation matches specification
 tools:
-  - codebase
-  - terminal
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - search/codebase
 handoffs:
   - label: Complete Feature

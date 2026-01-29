@@ -2,8 +2,15 @@
 name: sdd-specify
 description: Phase 3 - Generate specification document
 tools:
-  - codebase
-  - terminal
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - search/codebase
 handoffs:
   - label: Create Tasks

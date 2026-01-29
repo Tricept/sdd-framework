@@ -2,8 +2,15 @@
 name: sdd-initiate
 description: Phase 1 - Create feature branch and spec folder
 tools:
-  - codebase
-  - terminal
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - mcp__atlassian__getJiraIssue
   - mcp__atlassian__getAccessibleAtlassianResources
 handoffs:
@@ -47,29 +54,45 @@ User provides: `$ARGUMENTS`
 
 ## Generate Identifiers
 
-### From Jira Issue
+### Get Current Date
 
+First, get today's date for folder naming:
+
+```bash
+date +%Y-%m-%d
+```
+
+Use this date (e.g., `2026-01-29`) for all folder names below.
+
+### Branch Naming
+
+**From Jira Issue:**
 ```
 Branch: feature/[ISSUE-KEY]-[summary-slug]
-Folder: specs/active/[ISSUE-KEY]-[summary-slug]/
-
-Example:
-- Issue: PROJ-123 "Add User Authentication"
-- Branch: feature/PROJ-123-add-user-authentication
+Example: feature/PROJ-123-add-user-authentication
 ```
 
-### From Description
-
+**From Description:**
 ```
 Branch: feature/YYYY-MM-DD-[slug]
-Folder: specs/active/YYYY-MM-DD-[slug]/
-
-Example:
-- Description: "user authentication with OAuth"
-- Branch: feature/2025-01-29-user-auth-oauth
+Example: feature/2026-01-29-user-auth-oauth
 ```
 
-Slug: 2-4 words from description, kebab-case
+### Spec Folder Naming (ALWAYS date-prefixed)
+
+**From Jira Issue:**
+```
+Folder: specs/active/YYYY-MM-DD-[ISSUE-KEY]-[summary-slug]/
+Example: specs/active/2026-01-29-PROJ-123-add-user-authentication/
+```
+
+**From Description:**
+```
+Folder: specs/active/YYYY-MM-DD-[slug]/
+Example: specs/active/2026-01-29-user-auth-oauth/
+```
+
+Slug: 2-4 words, kebab-case
 
 ---
 

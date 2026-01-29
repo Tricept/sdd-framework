@@ -2,9 +2,15 @@
 name: sdd-start
 description: Start a new spec (phases 1-3 combined)
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - mcp__atlassian__getJiraIssue
   - mcp__atlassian__getAccessibleAtlassianResources
 handoffs:
@@ -48,10 +54,27 @@ User provides: `$ARGUMENTS`
 
 ## Phase 1: Initiate
 
+### Get Current Date
+
+First, get today's date for folder naming:
+
+```bash
+date +%Y-%m-%d
+```
+
+Use this date (e.g., `2026-01-29`) for all folder names below.
+
 ### Generate Identifiers
 
-**From Jira**: `feature/[ISSUE-KEY]-[summary-slug]`
-**From description**: `feature/YYYY-MM-DD-[slug]` (2-4 words, kebab-case)
+**Branch naming:**
+- From Jira: `feature/[ISSUE-KEY]-[summary-slug]`
+- From description: `feature/YYYY-MM-DD-[slug]`
+
+**Spec folder naming (ALWAYS date-prefixed):**
+- From Jira: `specs/active/YYYY-MM-DD-[ISSUE-KEY]-[summary-slug]/`
+- From description: `specs/active/YYYY-MM-DD-[slug]/`
+
+Slug: 2-4 words, kebab-case (e.g., `2026-01-29-state-management-system`)
 
 ### Create Structure
 

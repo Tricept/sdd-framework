@@ -2,9 +2,15 @@
 name: sdd-tasks
 description: Phase 4 - Create TDD-ordered task breakdown
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - mcp__atlassian__createJiraIssue
   - mcp__atlassian__getJiraIssue
 handoffs:

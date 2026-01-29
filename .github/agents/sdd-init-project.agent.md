@@ -2,9 +2,15 @@
 name: sdd-init-project
 description: Initialize a new project with SDD framework
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - mcp__atlassian__getAccessibleAtlassianResources
 handoffs:
   - label: Start First Feature

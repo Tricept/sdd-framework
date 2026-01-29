@@ -2,8 +2,15 @@
 name: sdd-implement
 description: Phase 5 - TDD implementation (Red-Green-Refactor)
 tools:
-  - codebase
-  - terminal
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
+  - mcp_io_github_ups_resolve-library-id
+  - mcp_io_github_ups_get-library-docs
   - search/codebase
 handoffs:
   - label: Validate Implementation
