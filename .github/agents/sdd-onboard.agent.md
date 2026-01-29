@@ -361,7 +361,24 @@ mkdir -p product
 
 ---
 
-## Step 10: Generate Standards Files
+## Step 10: Update Copilot Instructions
+
+Update `.github/copilot-instructions.md` with discovered tech stack:
+
+Replace the Tech Stack section at the bottom:
+```markdown
+## Tech Stack
+
+<!-- Updated by /sdd.onboard -->
+- Backend: [detected technology]
+- Frontend: [detected technology]
+- Database: [detected technology]
+- Testing: [detected framework]
+```
+
+---
+
+## Step 11: Generate Standards Files
 
 ### code-quality.md
 
@@ -488,7 +505,7 @@ Example: test_[unit]_[scenario]_[expected]
 
 ---
 
-## Step 11: Generate Mission (Optional)
+## Step 12: Generate Mission (Optional)
 
 If README contains project description, generate `product/mission.md`:
 

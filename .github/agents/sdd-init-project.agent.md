@@ -128,7 +128,24 @@ mkdir -p product
 
 ---
 
-## Step 3: Generate Standards Files
+## Step 3: Update Copilot Instructions
+
+Update `.github/copilot-instructions.md` with the tech stack:
+
+Replace the Tech Stack section at the bottom:
+```markdown
+## Tech Stack
+
+<!-- Updated by /sdd.init-project -->
+- Backend: [user's answer]
+- Frontend: [user's answer]
+- Database: [user's answer]
+- Testing: [user's answer]
+```
+
+---
+
+## Step 4: Generate Standards Files
 
 ### standards/global/code-quality.md
 
@@ -206,7 +223,7 @@ Generate based on test framework:
 
 ---
 
-## Step 4: Generate Mission Document
+## Step 5: Generate Mission Document
 
 Create `product/mission.md`:
 
@@ -255,7 +272,7 @@ Create `product/mission.md`:
 
 ---
 
-## Step 5: Update/Generate README
+## Step 6: Update/Generate README
 
 If no README exists, create one. If one exists, offer to add SDD section:
 
@@ -298,7 +315,7 @@ This project uses **Spec-Driven Development (SDD)**.
 
 ---
 
-## Step 6: Initialize Git (if not already)
+## Step 7: Initialize Git (if not already)
 
 ```bash
 # Only if no .git folder exists

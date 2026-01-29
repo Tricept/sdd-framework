@@ -1,17 +1,11 @@
 ---
 name: sdd-implement
-description: Phase 5 - TDD implementation (Red-Green-Refactor)
+description: Phase 5 - Orchestrate TDD implementation using subagents
 tools:
-  - agent
-  - read
-  - execute
-  - edit
-  - search
-  - web
-  - todo
-  - mcp_io_github_ups_resolve-library-id
-  - mcp_io_github_ups_get-library-docs
+  - codebase
+  - terminal
   - search/codebase
+  - agent
 handoffs:
   - label: Validate Implementation
     agent: sdd-validate
@@ -19,9 +13,18 @@ handoffs:
     send: true
 ---
 
-# TDD Implementation
+# TDD Implementation Orchestrator
 
-Implement following strict Red-Green-Refactor.
+Orchestrate the implementation process using specialized subagents for each TDD phase.
+
+## Subagents
+
+| Agent | TDD Phase | Responsibility |
+|-------|-----------|----------------|
+| `@sdd-test-writer` | RED | Write failing tests |
+| `@sdd-implementer` | GREEN | Write minimal code to pass |
+| `@sdd-refactorer` | REFACTOR | Improve code quality |
+| `@sdd-verifier` | VERIFY | Check phase completion |
 
 ## Prerequisites
 
@@ -37,11 +40,11 @@ Read these files before starting:
 
 1. **Specification**: `specs/active/[folder]/spec.md`
    - Functional requirements to implement
-   - Test strategy to follow
+   - Test strategy and coverage targets
    - Existing code to leverage
 
 2. **Task Breakdown**: `specs/active/[folder]/tasks.md`
-   - Ordered tasks to follow
+   - Ordered tasks grouped by phase
    - Dependencies between tasks
    - Acceptance criteria
 
@@ -49,236 +52,239 @@ Read these files before starting:
    - `standards/global/code-quality.md`
    - `standards/global/testing.md`
 
-### Identify Progress
+4. **Project Instructions** (if exists):
+   - `.github/copilot-instructions.md`
+
+---
+
+## Step 2: Identify Progress
 
 Check tasks.md for:
 - Completed tasks: `[x]`
-- Next task to work on
 - Current phase
+- Next task to work on
+- Any blocked tasks
 
 ---
 
-## Step 2: TDD Cycle (NON-NEGOTIABLE)
+## Step 3: Process Each Phase
+
+Phases are processed sequentially (typically: Database → Backend → Frontend → Integration).
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  RED: Write a failing test                              │
-│  - Test defines expected behavior                       │
-│  - Test MUST fail before implementation                 │
-│  - Commit: "test: add failing test for [behavior]"      │
-├─────────────────────────────────────────────────────────┤
-│  GREEN: Write minimal code to pass                      │
-│  - Only implement what's needed                         │
-│  - No premature optimization                            │
-│  - Commit: "feat: implement [behavior] to pass test"    │
-├─────────────────────────────────────────────────────────┤
-│  REFACTOR: Improve while keeping tests green            │
-│  - Clean up duplication                                 │
-│  - Improve naming and structure                         │
-│  - Tests MUST still pass                                │
-│  - Commit: "refactor: improve [component]"              │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  FOR EACH PHASE                                                 │
+│                                                                 │
+│  For each task in phase (sequential):                           │
+│  ───────────────────────────────────                            │
+│                                                                 │
+│    1. Check if task is blocked                                  │
+│       - If blockedBy tasks not complete → skip for now          │
+│       - If ready → proceed                                      │
+│                                                                 │
+│    2. Invoke @sdd-test-writer (RED)                             │
+│       ├── Pass: spec, tasks, standards, current_task            │
+│       ├── Wait for completion                                   │
+│       └── Receive: test files, test names, confirmation         │
+│                                                                 │
+│    3. Invoke @sdd-implementer (GREEN)                           │
+│       ├── Pass: spec, tasks, standards, current_task,           │
+│       │         test_output from step 2                         │
+│       ├── Wait for completion                                   │
+│       └── Receive: implementation files, confirmation           │
+│                                                                 │
+│    4. Invoke @sdd-refactorer (REFACTOR)                         │
+│       ├── Pass: spec, tasks, standards, current_task,           │
+│       │         implementation_output from step 3               │
+│       ├── Wait for completion                                   │
+│       └── Receive: refactoring summary, confirmation            │
+│                                                                 │
+│    5. Mark task complete in tasks.md                            │
+│       - Update: [ ] → [x]                                       │
+│       - Add completion date                                     │
+│                                                                 │
+│  After all tasks in phase complete:                             │
+│  ─────────────────────────────────                              │
+│                                                                 │
+│    6. Invoke @sdd-verifier                                      │
+│       ├── Pass: spec, tasks, standards, phase_name              │
+│       ├── Wait for completion                                   │
+│       └── Receive: test results, coverage, issues               │
+│                                                                 │
+│    7. Handle verification result                                │
+│       - If PASSED → continue to next phase                      │
+│       - If FAILED → report issues, ask user how to proceed      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Step 3: Execute Tasks
+## Step 4: Subagent Invocation
 
-For each task in order:
+### Invoking Test Writer (RED)
 
-### 1. Read the Task
-- Understand acceptance criteria
-- Check dependencies (must be complete)
-- Identify related spec requirements (FR-X.X)
-
-### 2. Execute Based on Task Type
-
-**[TEST] Task:**
 ```
-├── Write the test
-├── Run test → Verify it FAILS (this is expected!)
-├── Commit: "test: [description]"
-└── Report: Test written, failing as expected
+@sdd-test-writer
+
+Context:
+- Spec: [path to spec.md]
+- Task: [current task ID and full details]
+- Standards: [path to testing.md]
+- Requirement: [FR-X.X being implemented]
+
+Write failing tests for this task.
 ```
 
-**[IMPL] Task (DB/API/UI):**
+### Invoking Implementer (GREEN)
+
 ```
-├── Reference the related [TEST] task
-├── Write minimal implementation to pass
-├── Run tests → Verify they PASS
-├── Commit: "feat: [description]"
-└── Report: Implementation complete, tests passing
+@sdd-implementer
+
+Context:
+- Spec: [path to spec.md]
+- Task: [current task ID and full details]
+- Standards: [path to code-quality.md]
+- Test files: [paths from test-writer]
+- Test names: [list from test-writer]
+
+Implement minimal code to pass the tests.
 ```
 
-**[VERIFY] Task:**
+### Invoking Refactorer (REFACTOR)
+
 ```
-├── Run full test suite for phase
-├── Check coverage
-└── Report: Phase complete, all tests green
+@sdd-refactorer
+
+Context:
+- Spec: [path to spec.md]
+- Task: [current task ID and full details]
+- Standards: [path to code-quality.md]
+- Implementation files: [paths from implementer]
+
+Refactor while keeping tests green.
 ```
 
-### 3. Update tasks.md
-- Mark task complete: `[x]`
-- Add completion date and notes if needed
+### Invoking Verifier (PHASE END)
 
-### 4. Continue to Next Task
+```
+@sdd-verifier
+
+Context:
+- Spec: [path to spec.md]
+- Phase: [phase name]
+- Completed tasks: [list of task IDs]
+- Coverage target: [from spec or standards]
+
+Verify phase completion and report results.
+```
 
 ---
 
-## Implementation Guidelines
+## Step 5: Handle Blocked Tasks
 
-### Writing Tests (RED)
-
-**DO:**
-- Test behavior, not implementation
-- Use descriptive test names: `test_[unit]_[scenario]_[expected]`
-- One logical assertion per test
-- Include edge cases from spec
-
-**DON'T:**
-- Test implementation details
-- Write tests that pass immediately
-- Skip edge cases
-- Over-mock dependencies
-
-### Writing Implementation (GREEN)
-
-**DO:**
-- Write ONLY what's needed to pass tests
-- Reference existing code patterns from spec
-- Follow code quality standards
-- Keep functions small and focused
-
-**DON'T:**
-- Add features not in spec
-- Optimize prematurely
-- Add "nice to have" code
-- Ignore existing patterns
-
-### Refactoring
-
-**DO:**
-- Remove duplication
-- Improve naming
-- Extract helper functions
-- Run tests after each change
-
-**DON'T:**
-- Add new features
-- Change behavior
-- Skip running tests
+If a task has `blockedBy: [T001, T002]`:
+1. Check if T001 and T002 are marked complete
+2. If yes → proceed with task
+3. If no → skip and continue to next unblocked task
+4. Return to blocked tasks when dependencies complete
 
 ---
 
-## Scope Control (CRITICAL)
+## Step 6: Scope Control (CRITICAL)
 
-### Before Implementing Anything
+Before allowing ANY implementation:
 
-Ask yourself:
-1. Is this in the spec?
-2. Is this in the task list?
-3. Does this address an FR-X.X requirement?
+1. Is this task in tasks.md?
+2. Does this task relate to a spec requirement (FR-X.X)?
+3. Is this NOT in the "Out of Scope" section?
 
-**If NO to any → Don't implement it.**
-
-### Out of Scope Enforcement
+**If NO to any → Do not implement. Note it for future work.**
 
 The spec's "Out of Scope" section is **binding**:
-
-- ❌ Do NOT implement out-of-scope items
-- ❌ Do NOT add "improvements" beyond spec
-- ❌ Do NOT refactor unrelated code
-- ❌ No "while I'm here" additions
-
-If you discover something that should be added:
-1. Note it in tasks.md under "Notes"
-2. Continue with current spec
-3. Create separate ticket/spec later
+- Do NOT implement out-of-scope items
+- Do NOT add "improvements" beyond spec
+- Do NOT refactor unrelated code
+- No "while I'm here" additions
 
 ---
 
-## Error Handling
-
-### Test Failures
-
-If tests fail unexpectedly:
-1. Check if test is correct (matches spec)
-2. Check if implementation matches test
-3. Fix the issue
-4. Re-run tests
-5. Continue only when green
-
-### Blocked by Dependencies
-
-If a task is blocked:
-1. Check if dependency task is complete
-2. If not, complete dependency first
-3. If external blocker, note in tasks.md and ask user
-
----
-
-## Progress Tracking
+## Step 7: Progress Tracking
 
 ### Update tasks.md After Each Task
 
 ```markdown
-- [x] T004 [TEST] [DB] Write schema tests ✓ 2025-01-29
-      └── Note: 3 tests covering constraints
+- [x] T004 [TEST] Write schema tests ✓ 2026-01-29
+      └── Tests: 3 added, all passing
+- [x] T005 [IMPL] Create migration ✓ 2026-01-29
+      └── Files: migrations/001_create_users.sql
 ```
 
-### Report Progress After Each Phase
+### Report After Each Phase
 
-```
-## Phase [X] Complete
+```markdown
+## Phase Complete: [Phase Name]
 
 ### Tasks Completed
 - [x] T004: Schema tests
-- [x] T005: Validation tests
-- [x] T006: Migration
-- [x] T007: Model
+- [x] T005: Migration
+- [x] T006: Model
 
-### Test Results
-- Tests: [X] passing, 0 failing
+### Verification Results
+- Tests: [X] passing
 - Coverage: [X]%
+- Status: PASSED
 
 ### Next Phase
-Phase [X+1]: [Name]
-Starting with: T[next]
+[Phase Name] starting with T007
 ```
+
+---
+
+## Step 8: Error Handling
+
+### Subagent Reports Test Failure
+
+1. Review the failure details
+2. Determine if test or implementation is wrong
+3. If test wrong → re-invoke test-writer to fix
+4. If implementation wrong → re-invoke implementer to fix
+5. Re-run verification
+
+### Subagent Reports Blocked
+
+1. Identify the blocker
+2. Check if it's a dependency issue
+3. If external blocker → ask user for input
+4. Document in tasks.md
 
 ---
 
 ## Output
 
-After implementation session:
+When implementation session ends (complete or paused):
 
-```
+```markdown
 ## Implementation Progress
 
 **Spec**: `specs/active/[folder]/spec.md`
 **Tasks**: `specs/active/[folder]/tasks.md`
 
 ### Session Summary
-| Phase | Status | Tests | Coverage |
-|-------|--------|-------|----------|
-| Setup | Complete | - | - |
-| Database | Complete | [X] pass | [X]% |
-| Backend | Complete | [X] pass | [X]% |
-| Frontend | In Progress | [X] pass | [X]% |
-| Integration | Pending | - | - |
-| Polish | Pending | - | - |
+| Phase | Status | Tasks | Tests | Coverage |
+|-------|--------|-------|-------|----------|
+| Database | Complete | 3/3 | 12 | 95% |
+| Backend | Complete | 5/5 | 24 | 88% |
+| Frontend | In Progress | 2/4 | 8 | 72% |
+| Integration | Pending | 0/2 | - | - |
 
-### Tasks This Session
-- [x] T014: Component tests
-- [x] T015: Interaction tests
-- [x] T016: Implement component
-- [ ] T017: API integration (next)
-
-### Commits
-[List commits made]
+### Commits This Session
+- `test: add schema validation tests`
+- `feat: implement user migration`
+- `refactor: extract validation helper`
 
 ### Next Steps
-[What to do next]
+[What to do next - continue implementation or proceed to validation]
 ```
 
-When all tasks complete, proceed to validation.
+When all tasks complete → Suggest proceeding to validation phase.
