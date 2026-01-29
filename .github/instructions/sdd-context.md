@@ -5,31 +5,50 @@ This file provides reference documentation for the SDD workflow. The actual inst
 ## Workflow Overview
 
 ```
-/sdd.start (or @sdd-start) - Phases 1-3 combined
-    │
-    ├── Creates feature branch
-    ├── Gathers requirements (with codebase search)
-    └── Generates specification
-            │
-            ▼ [User reviews spec]
-/sdd.tasks (or @sdd-tasks) - Phase 4
-    │
-    └── Creates TDD-ordered task breakdown
-            │
-            ▼ [User reviews tasks]
-/sdd.implement (or @sdd-implement) - Phase 5
-    │
-    └── TDD implementation (Red-Green-Refactor)
-            │
-            ▼
-/sdd.validate (or @sdd-validate) - Phase 6
-    │
-    └── Verifies implementation vs spec
-            │
-            ▼
-/sdd.complete (or @sdd-complete) - Phase 7
-    │
-    └── Moves spec to implemented/, finalizes
+┌─────────────────────────────────────────────────────────────────┐
+│  PROJECT SETUP (Choose One)                                     │
+│  ──────────────────────────                                     │
+│                                                                 │
+│  /sdd.init-project - For NEW projects                           │
+│      ├── Q&A: tech stack, architecture, testing                 │
+│      ├── Generate project structure from scratch                │
+│      └── Generate standards based on answers                    │
+│                                                                 │
+│  /sdd.onboard - For EXISTING projects                           │
+│      ├── Analyze codebase for tech stack, patterns              │
+│      ├── Discover naming conventions, test patterns             │
+│      ├── Ask only when inference is unclear                     │
+│      └── Generate standards matching existing code              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  FEATURE DEVELOPMENT                                            │
+│  ───────────────────                                            │
+│                                                                 │
+│  /sdd.start (or @sdd-start) - Phases 1-3 combined               │
+│      ├── Creates feature branch                                 │
+│      ├── Gathers requirements (with codebase search)            │
+│      └── Generates specification                                │
+│              │                                                  │
+│              ▼ [User reviews spec]                              │
+│                                                                 │
+│  /sdd.tasks (or @sdd-tasks) - Phase 4                           │
+│      └── Creates TDD-ordered task breakdown                     │
+│              │                                                  │
+│              ▼ [User reviews tasks]                             │
+│                                                                 │
+│  /sdd.implement (or @sdd-implement) - Phase 5                   │
+│      └── TDD implementation (Red-Green-Refactor)                │
+│              │                                                  │
+│              ▼                                                  │
+│  /sdd.validate (or @sdd-validate) - Phase 6                     │
+│      └── Verifies implementation vs spec                        │
+│              │                                                  │
+│              ▼                                                  │
+│  /sdd.complete (or @sdd-complete) - Phase 7                     │
+│      └── Moves spec to implemented/, finalizes                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## Individual Phase Commands
@@ -49,25 +68,35 @@ For granular control, use individual phases:
 ## Folder Structure
 
 ```
-specs/
-├── active/                    # Specs in development
-│   └── YYYY-MM-DD-feature/
-│       ├── spec.md
-│       ├── tasks.md
-│       ├── requirements.md
-│       ├── validation-report.md
-│       └── visuals/
+project/
+├── .github/
+│   ├── agents/             # SDD agents with full instructions
+│   ├── prompts/            # SDD commands (wrappers)
+│   └── instructions/       # Reference docs
 │
-├── implemented/               # Completed specs
+├── standards/
+│   └── global/
+│       ├── code-quality.md # Tech-stack-specific quality rules
+│       └── testing.md      # TDD requirements
 │
-└── _templates/
-    ├── spec.template.md
-    └── tasks.template.md
-
-standards/
-└── global/
-    ├── code-quality.md
-    └── testing.md
+├── specs/
+│   ├── active/             # Specs in development
+│   │   └── YYYY-MM-DD-feature/
+│   │       ├── spec.md
+│   │       ├── tasks.md
+│   │       ├── requirements.md
+│   │       ├── validation-report.md
+│   │       └── visuals/
+│   │
+│   ├── implemented/        # Completed specs
+│   │
+│   └── _templates/
+│       ├── spec.template.md
+│       └── tasks.template.md
+│
+└── product/                # Optional product docs
+    ├── mission.md          # Project mission and overview
+    └── roadmap.md          # Feature roadmap (if not using Jira)
 ```
 
 ## Jira Integration
@@ -75,9 +104,17 @@ standards/
 When Atlassian MCP is available:
 - Start from Jira issues: `/sdd.start PROJ-123`
 - Auto-fetch issue details and attachments
-- Sync tasks as subtasks
 - Update issue status on completion
 
 When unavailable:
 - Graceful degradation
 - If ticket ID provided without Jira, ask user for description
+
+## Roadmap → Specs
+
+Features can originate from:
+1. **Jira tickets**: `/sdd.start PROJ-123`
+2. **Local roadmap**: `/sdd.start "feature from roadmap"`
+3. **Ad-hoc description**: `/sdd.start "new feature idea"`
+
+Traceability is maintained via spec frontmatter linking to source.
