@@ -2,9 +2,13 @@
 name: sdd-refactorer
 description: TDD REFACTOR phase - Improve code while keeping tests green
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
 ---
 
 # Refactorer (REFACTOR Phase)

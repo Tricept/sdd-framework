@@ -2,10 +2,13 @@
 name: sdd-implement
 description: Phase 5 - Orchestrate TDD implementation using subagents
 tools:
-  - codebase
-  - terminal
-  - search/codebase
   - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
 handoffs:
   - label: Validate Implementation
     agent: sdd-validate

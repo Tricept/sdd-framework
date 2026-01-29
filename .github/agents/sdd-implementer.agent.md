@@ -2,9 +2,13 @@
 name: sdd-implementer
 description: TDD GREEN phase - Write minimal code to pass tests
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
 ---
 
 # Implementer (GREEN Phase)

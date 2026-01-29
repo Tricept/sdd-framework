@@ -2,9 +2,13 @@
 name: sdd-verifier
 description: Verify phase completion - Run full test suite and check coverage
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
 ---
 
 # Verifier (Phase Verification)

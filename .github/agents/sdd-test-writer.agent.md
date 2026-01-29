@@ -2,9 +2,13 @@
 name: sdd-test-writer
 description: TDD RED phase - Write failing tests for a task
 tools:
-  - codebase
-  - terminal
-  - search/codebase
+  - agent
+  - read
+  - execute
+  - edit
+  - search
+  - web
+  - todo
 ---
 
 # Test Writer (RED Phase)
